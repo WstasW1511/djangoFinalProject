@@ -1,3 +1,4 @@
+import random
 from random import randint
 import requests
 
@@ -8,9 +9,6 @@ class UserBot:
         self.password = self.password(6)
         self.is_active = self.is_active()
         self.is_staff = self.is_staff()
-
-    def getInfo(self):
-        print(f'Phone: {self.phone}, Password: {self.password}, Staff: {self.is_staff}, Activ: {self.is_active}')
 
     def number(self, n):
         start = 10 ** (n - 1)
@@ -38,6 +36,8 @@ class UserBot:
             is_active = True
         return is_active
 
+    def getInfo(self):
+        print(f'Phone: {self.phone}, Password: {self.password}, Staff: {self.is_staff}, Activ: {self.is_active}')
 
 howUsersCreate = int(input('Введите количество юзеров которое нужно создать: '))
 mass = []
@@ -56,3 +56,24 @@ for i in range(howUsersCreate):
 
 for i in mass:
     print(i.getInfo())
+
+try:
+    for i in mass:
+        try:
+            log_in = requests.post('http://127.0.0.1:8000/users/login/', data=({
+                'phone': i.phone,
+                'password': i.password
+            }))
+        except:
+            print('Not Log In')
+        print(i.phone, i.password)
+        views = ['BLOG', 'NEWS', 'ADVERTISING']
+        view = random.choice(views)
+        r = requests.post('http://127.0.0.1:8000/posts/list/', data={
+            'text': 'TEXT BOT2 456'
+            # 'view': view,
+            # 'author':i.phone
+        })
+        print('OK')
+except:
+    print("Don't login!")
