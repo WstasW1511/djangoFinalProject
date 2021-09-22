@@ -46,8 +46,8 @@ for i in range(howUsersCreate):
     try:
         r = requests.post('http://127.0.0.1:8000/users/registration/', data=({'phone': user.phone,
                                                                          'password': user.password,
-                                                                              'is_staff': user.is_staff(),
-                                                                              'is_active()': user.is_active(),
+                                                                              'is_staff': user.is_staff,
+                                                                              'is_active()': user.is_active,
                                                                               'kind': 'User1'
                                                                               }))
         mass.append(user)
