@@ -1,6 +1,11 @@
 import random
-from random import randint
+from random import randint, choice
 import requests
+from string import ascii_letters
+from datetime import datetime
+
+
+
 
 
 class UserBot:
@@ -40,6 +45,7 @@ class UserBot:
         print(f'Phone: {self.phone}, Password: {self.password}, Staff: {self.is_staff}, Activ: {self.is_active}')
 
 howUsersCreate = int(input('Введите количество юзеров которое нужно создать: '))
+start_time = datetime.now()
 mass = []
 for i in range(howUsersCreate):
     user = UserBot()
@@ -47,33 +53,36 @@ for i in range(howUsersCreate):
         r = requests.post('http://127.0.0.1:8000/users/registration/', data=({'phone': user.phone,
                                                                          'password': user.password,
                                                                               'is_staff': user.is_staff,
-                                                                              'is_active()': user.is_active,
+                                                                              'is_active': user.is_active,
                                                                               'kind': 'User1'
                                                                               }))
         mass.append(user)
+        print('Registration', r, i+1)
     except:
         print('dont created')
 
-for i in mass:
-    print(i.getInfo())
-
 try:
     for i in mass:
-        try:
-            log_in = requests.post('http://127.0.0.1:8000/users/login/', data=({
-                'phone': i.phone,
-                'password': i.password
-            }))
-        except:
-            print('Not Log In')
-        print(i.phone, i.password)
-        views = ['BLOG', 'NEWS', 'ADVERTISING']
+        log_in = requests.post('http://127.0.0.1:8000/users/login/', data=({
+            'phone': i.phone,
+            'password': i.password
+        }))
+
+        tokens = log_in.json()
+        actoken = tokens['tokens']['access']
+        views = ['Blog', 'News', 'Advertising']
         view = random.choice(views)
-        r = requests.post('http://127.0.0.1:8000/posts/list/', data={
-            'text': 'TEXT BOT2 456'
-            # 'view': view,
-            # 'author':i.phone
-        })
-        print('OK')
+        text = ''.join(choice(ascii_letters) for i in range(10))
+        a = requests.get('http://127.0.0.1:8000/posts/list/')
+        r = requests.post('http://127.0.0.1:8000/posts/list/', headers={'Authorization': 'Bearer {}'.format(actoken)},
+                                                                data={
+                                                                'text': text,
+                                                                'view': view
+                                                                    })
+
+        print("Create Post: ", r)
+    print('Created', howUsersCreate, 'posts')
 except:
     print("Don't login!")
+end_time = datetime.now()
+print('Duration: {}'.format(end_time - start_time))
