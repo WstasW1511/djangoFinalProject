@@ -99,11 +99,11 @@ WSGI_APPLICATION = 'djangoFinalProject.wsgi.application'
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
-# }
+# }4565465
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'myproject1',
+        'NAME': 'finalproject',
         'USER': 'myprojectuser',
         'PASSWORD': 'password',
         'HOST': 'localhost',
