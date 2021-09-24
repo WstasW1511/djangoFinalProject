@@ -3,7 +3,7 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin,DestroyMode
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from posts.serializers import *
-from users.permissions import PostCreate
+from posts.permissions import PostCreate
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
@@ -42,7 +42,6 @@ class PostViewSet(ListModelMixin,
             serializer_class = PostUpdateSerializer
         return serializer_class
 
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -50,14 +49,10 @@ class PostViewSet(ListModelMixin,
         serializer_data = PostSerializer(instance).data
         return Response(data=serializer_data, status=status.HTTP_201_CREATED)
 
-
     def list(self, request, *args, **kwargs):
-        #instance = self.get_posts()
         filtered_queryset = self.filter_queryset(self.queryset.all())
         serializer = self.get_serializer(filtered_queryset, many=True)
-        #serializer = self.get_serializer(instance, many=True)
         return Response(serializer.data)
-
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

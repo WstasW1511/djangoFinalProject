@@ -3,10 +3,17 @@ from users.models.user import CustomUser
 from rest_framework.validators import ValidationError
 
 
-class UserSerializer(ModelSerializer):
+class UserAdminSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('__all__')
+        fields = ('uuid',
+                  'phone',
+                  'first_name',
+                  'last_name',
+                  'is_staff',
+                  'is_active',
+                  'password',
+                  'kind')
 
 
 class UserListSerializer(ModelSerializer):
@@ -16,3 +23,11 @@ class UserListSerializer(ModelSerializer):
             'phone',
             'password',
         )
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = (
+            'uuid',
+            'first_name',
+                  'last_name',)

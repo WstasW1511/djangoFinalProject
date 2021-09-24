@@ -27,7 +27,13 @@ class LikeCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         request = self.context['request']
-        old_like = Like.objects.filter(author=request.user).first()
+        post = attrs['post']
+
+        old_like = Like.objects.filter(author=request.user, post=post).first()
         if old_like:
-            raise ValidationError('You check this post yet')
+            if old_like.kind == attrs['kind']:
+                raise ValidationError('You check this post yet')
+            else:
+                # old_like.kind = attrs['kind']
+                old_like.delete()
         return attrs

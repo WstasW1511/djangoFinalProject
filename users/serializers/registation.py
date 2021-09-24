@@ -14,8 +14,8 @@ class RegistrationSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=50, required=True)
     # refresh = serializers.CharField(max_length=500, required=False)
     kind = serializers.ChoiceField(choices=GenModeratorChoice)
-    is_staff = serializers.BooleanField(default=True)
-    is_active = serializers.BooleanField(default=True)
+    # is_staff = serializers.BooleanField(default=True)
+    # is_active = serializers.BooleanField(default=True)
     class Meta:
         model = CustomUser
         fields = (
@@ -25,8 +25,8 @@ class RegistrationSerializer(serializers.Serializer):
             'password',
             # 'refresh'
             'kind',
-            'is_staff',
-            'is_active'
+            # 'is_staff',
+            # 'is_active'
         )
     def validate(self, attrs):
 

@@ -7,7 +7,11 @@ class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentModel
         fields = (
+            'uuid',
             "posts",
             "comment",
             'author'
         )
+
+    def validate(self, attrs):
+        return attrs
