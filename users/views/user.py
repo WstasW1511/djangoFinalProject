@@ -1,5 +1,5 @@
 from users.serializers.user_serializer import UserSerializer, UserListSerializer
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.viewsets import GenericViewSet
@@ -10,16 +10,16 @@ from users.models import CustomUser
 
 class UserViewSet(ListModelMixin, DestroyModelMixin,RetrieveModelMixin,UpdateModelMixin, GenericViewSet):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [AllowAny, ]
     queryset = CustomUser.objects.all()
 
 
     def get_permissions(self):
-        permissions_classes = [IsAuthenticated, ]
+        permissions_classes = [AllowAny, ]
         if self.action == 'retrieve':
-            permissions_classes = [IsAdminUser, UserCreate]
+            permissions_classes = [UserCreate, ]
         if self.action == 'update' or self.action == 'destroy' or self.action == 'partial_update':
-            permissions_classes = [IsAdminUser, UserCreate]
+            permissions_classes = [UserCreate, ]
         return [permission() for permission in permissions_classes]
 
     def get_serializer_class(self):

@@ -5,6 +5,7 @@ from posts.views import PostViewSet, CommentViewSet, Like2ViewSet, AnaliticViewS
 
 router = DefaultRouter()
 router.register('list', PostViewSet)
+router.register('comment', CommentViewSet)
 
 
 urlpatterns = [
@@ -13,5 +14,7 @@ urlpatterns = [
     path('likes/', Like2ViewSet.as_view({'get': 'list'})),
     path('likes/create/', Like2ViewSet.as_view({'post': 'create'})),
     path('analitic/', AnaliticViewSet.as_view()),
-    path('comment/', CommentViewSet.as_view())
+
+
+
 ] + router.urls
