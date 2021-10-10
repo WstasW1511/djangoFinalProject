@@ -1,16 +1,17 @@
 from tkinter import *
 import socket
 import datetime
-from threading import Thread
 
-client_socket = socket.socket()  # instantiate
+
+client_socket = socket.socket()
 now = datetime.datetime.now()
+
 
 def connect():
     try:
-        host = socket.gethostname()  # as both code is running on same pc
-        port = 5000  # socket server port number
-        client_socket.connect((host, port))  # connect to the server
+        host = socket.gethostname()
+        port = 5000
+        client_socket.connect((host, port))
         textConnect = Text(width=12, height=2, font="Calibri 8", bg="green", fg='white')
         textConnect.grid(row=1, column=2, padx=0, pady=0)
         textConnect.delete(1.0, END)
@@ -25,23 +26,17 @@ def connect():
 def sendMessage():
     try:
         message = send.get()
-        client_socket.send(message.encode())  # send message
+        client_socket.send(message.encode())
         text.insert(1.0, '\n' + now.strftime("%d-%m-%Y %H:%M ") + nameEntry.get() + ': ' + message)
-        data = client_socket.recv(1024).decode()  # receive response
+        data = client_socket.recv(1024).decode()
         text.insert(1.0, '\n' + now.strftime("%d-%m-%Y %H:%M") + ' server tell: ' + data)
     except:
         text.delete(1.0, END)
         text.insert(1.0, "Can't send Message!")
 
-def receivMessage():
-    pass
-
-
 
 def clearMessage():
     text.delete(1.0, END)
-
-
 
 
 window = Tk()
@@ -73,12 +68,5 @@ btnSms.grid(row=7, column=1, padx=10, pady=10)
 
 btnClear = Button(window, width=10, height=2, text="Clear", command=clearMessage, font="Calibri 8", bg="black", fg="white")
 btnClear.grid(row=7, column=2, padx=10, pady=10)
-
-# th = Thread(target=sendMessage())
-#
-# th.start()
-
-
-
 
 mainloop()
