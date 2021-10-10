@@ -24,12 +24,13 @@ def connect():
 
 
 def sendMessage():
+
     try:
         message = send.get()
         client_socket.send(message.encode())
         text.insert(1.0, '\n' + now.strftime("%d-%m-%Y %H:%M ") + nameEntry.get() + ': ' + message)
         data = client_socket.recv(1024).decode()
-        text.insert(1.0, '\n' + now.strftime("%d-%m-%Y %H:%M") + ' server tell: ' + data)
+        text.insert(1.0, '\n' + now.strftime("%d-%m-%Y %H:%M ") + ' server tell: ' + data)
     except:
         text.delete(1.0, END)
         text.insert(1.0, "Can't send Message!")
