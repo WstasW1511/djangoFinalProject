@@ -1,21 +1,37 @@
 import socket
+import threading
+
+PORT = 5000
+SERVER = socket.gethostbyname(socket.gethostname())
+ADDR = (SERVER, PORT)
+DISCONNECT_MESSAGE = '!DISCONNECT'
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(ADDR)
 
 
-def server_program():
-    host = socket.gethostname()
-    port = 5000
-    server_socket = socket.socket()
-    server_socket.bind((host, port))
-    server_socket.listen(2)
-    conn, address = server_socket.accept()
-    print("Connection from: " + str(address))
+def handle_client(conn, addr):
+    print(f"[NEW CONNECTION] {addr} connected.")
+    connected = True
+    while connected:
+        msg = conn.recv(2048).decode()
+        if msg:
+            conn.send(msg.encode())
+            print(msg)
+        if msg == DISCONNECT_MESSAGE:
+            connected = False
+    conn.close()
+
+
+def start():
+    server.listen()
+    print(f'[LISTENING] Server is listening on {SERVER}')
     while True:
-        data = conn.recv(1024).decode()
-        print("from connected user: " + str(data))
-        data = input(' --> ')
-        conn.send(data.encode())  # send data to the client
-        conn.close()
+        conn, addr = server.accept()
+        thread = threading.Thread(target=handle_client, args=(conn, addr))
+        thread.start()
+        print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
 
 
-if __name__ == '__main__':
-    server_program()
+print("[STARTING] server is starting...")
+start()
